@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import com.github.jnoee.xo.cache.CacheSerializer;
 import com.github.jnoee.xo.exception.SysException;
 
@@ -31,7 +32,8 @@ public class SerializerFactory {
   public static RedisSerializer<Object> json() {
     ObjectMapper mapper = new ObjectMapper();
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    mapper.enableDefaultTyping(DefaultTyping.NON_FINAL, As.PROPERTY);
+    mapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, DefaultTyping.NON_FINAL,
+        As.PROPERTY);
     return new GenericJackson2JsonRedisSerializer(mapper);
   }
 

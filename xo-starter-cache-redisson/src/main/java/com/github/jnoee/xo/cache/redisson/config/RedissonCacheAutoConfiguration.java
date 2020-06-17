@@ -32,12 +32,7 @@ public class RedissonCacheAutoConfiguration {
   RedissonClient redisson() throws IOException {
     String configFile = cacheProperties.getConfigFile();
     ClassPathResource resource = new ClassPathResource(configFile);
-    Config config = null;
-    if (isJsonFile(configFile)) {
-      config = Config.fromJSON(resource.getInputStream());
-    } else {
-      config = Config.fromYAML(resource.getInputStream());
-    }
+    Config config = Config.fromYAML(resource.getInputStream());
     config.setCodec(getCodec(cacheProperties.getSerializer()));
     return Redisson.create(config);
   }
@@ -58,9 +53,5 @@ public class RedissonCacheAutoConfiguration {
       default:
         throw new SysException("没有匹配的序列化器。");
     }
-  }
-
-  private Boolean isJsonFile(String fileName) {
-    return fileName.endsWith(".json");
   }
 }
